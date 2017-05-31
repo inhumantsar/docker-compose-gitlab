@@ -30,7 +30,9 @@ The goal in using docker-compose to build this out is to get to a point where an
 
 A bunch of output will scroll by. Once tailed logs like the ones below start showing up, you should be able to access GitLab at http://localhost:8000.
 
-Note that on startup, docker-compose creates the volumes we're defining in `.env`. ALl of the important GitLab files persist by default at `/tmp/gitlab`. If you tear down this application and re-run `docker-compose up` it should pick right up where it left off with the same users and data.
+#### Persistence
+
+On startup, docker-compose creates the volumes we're defining in `.env`. All of the important GitLab files persist by default at `/tmp/gitlab`. If you tear down this application and re-run `docker-compose up` it should pick right up where it left off with the same users and data.
 
     $ ls /tmp/gitlab/
     config  data  logs
