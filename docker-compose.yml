@@ -1,0 +1,16 @@
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: '${GITLAB_SUBDOMAIN}.${GITLAB_DOMAIN}'
+  # environment:
+    # GITLAB_OMNIBUS_CONFIG: |
+        # any config added here will override whatever's in the gitlab.rb file, if one exists.
+        # more information: https://docs.gitlab.com/omnibus/docker/#pre-configure-docker-container
+  ports:
+    - '${HOST_HTTP}:80'
+    - '${HOST_HTTPS}:443'
+    - '${HOST_SSH}:22' # git interacts ssh by default, this is always a bit of a pain to deal with.
+  volumes:
+    - '${HOST_CONFIG_PATH}:/etc/gitlab'
+    - '${HOST_LOG_PATH}:/var/log/gitlab'
+    - '${HOST_DATA_PATH}:/var/opt/gitlab'
