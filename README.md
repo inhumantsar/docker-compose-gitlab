@@ -12,19 +12,20 @@ The goal in using docker-compose to build this out is to get to a point where an
 
 ## How?
 
-### Install pre-reqs
-
-* Docker: [Install Docker for Windows](https://docs.docker.com/docker-for-windows/install/)
-* docker-compose: On Mac or Windows, it probably came with Docker, otherwise: [Install Docker Compose](https://docs.docker.com/compose/install/)
-
 ### Reading material
 
 * [Offical guide to GitLab on Docker](https://docs.gitlab.com/omnibus/docker/)
 * [docker-compose documentation](https://docs.docker.com/compose/overview/)
 * [GitLab configuration documentation](https://docs.gitlab.com/omnibus/settings/configuration.html)
 
-### Run it
+### Install pre-reqs
 
+* Docker: [Install Docker for Windows](https://docs.docker.com/docker-for-windows/install/)
+* docker-compose: On Mac or Windows, it probably came with Docker, otherwise: [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+### Running it
+
+    $ cd /path/to/docker-compose.yml
     $ docker-compose up
     ... stuff doing, CTRL+C to quit ...
 
@@ -44,7 +45,7 @@ On startup, docker-compose creates the volumes we're defining in `.env`. All of 
     ...
 
 
-#### Overriding defaults during development.
+#### Overriding defaults during development
 
 Environment variables are a commonly used and easily accessible way to pass runtime configuration to a new container. The `.env` file is used by docker-compose to provide sane, overrideable defaults to the cluster. You can find these in use in the `docker-compose.yml`, their implementation looking suspiciously like shell variable substitution. It is not actually connected to the shell, so nothing fancy will work.
 
@@ -55,6 +56,7 @@ If you're going to be running this locally or testing two gitlabs alongside each
     $ export GITLAB_SUBDOMAIN="testingtesting"
     $ docker-compose up
 
+
 #### Running it in prod
 
 Docker recommends keeping the two configs separate so that the dev environment can evolve without affecting configs meant for prod. `prod.env` provides a place to keep defaults which would be sane for prod. Note that it's called within the `prod.yml` file with `env_file`. This isn't a required practice, but in a CI/CD world, it's good to be specific about what's for dev and what's for prod. Deploying into prod then looks something like this:
@@ -64,6 +66,7 @@ Docker recommends keeping the two configs separate so that the dev environment c
 An alternative to using `env_file`, which will inject those env vars into the container, and `prod.env` would be to re-write prod.env as a shell script. Instead of just setting the vars, `export` would be used, then the command to launch into prod would be:
 
     $ source prod.env.sh && docker-compose up -d -f prod.yml
+
 
 ### Configuring GitLab
 
