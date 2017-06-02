@@ -25,11 +25,10 @@ The goal in using docker-compose to build this out is to get to a point where an
 
 ### Running it
 
-    $ cd /path/to/docker-compose.yml
-    $ docker-compose up
-    ... stuff doing, CTRL+C to quit ...
+    $ cd /path/to/docker-compose-gitlab
+    $ ./start.sh
 
-A bunch of output will scroll by. Once tailed logs like the ones below start showing up, you should be able to access GitLab at http://localhost:8000.
+A bunch of output will scroll by. Once tailed logs like the ones below start showing up, you should be able to access GitLab at http://localhost:8000. You can Ctrl+C at any time to stop the tailed logs. If you don't see the CI runner at http://localhost:8000/admin/runners then copy the registration token shown and update `docker-compose.yml` so that the runner's `REGISTRATION_TOKEN` matches it.
 
 #### Persistence
 
@@ -45,7 +44,7 @@ On startup, docker-compose creates the volumes we're defining in `.env`. All of 
     ...
 
 
-#### Overriding defaults during development
+#### Overriding the defaults
 
 Environment variables are a commonly used and easily accessible way to pass runtime configuration to a new container. The `.env` file is used by docker-compose to provide sane, overrideable defaults to the cluster. You can find these in use in the `docker-compose.yml`, their implementation looking suspiciously like shell variable substitution. It is not actually connected to the shell, so nothing fancy will work.
 
@@ -54,19 +53,14 @@ If you're going to be running this locally or testing two gitlabs alongside each
     $ export HOST_HTTPS="8888"
     $ export HOST_SSH="1234"
     $ export GITLAB_SUBDOMAIN="testingtesting"
-    $ docker-compose up
+    $ ./start.sh
 
+For more permanent overrides (eg: for prod), add those overrides to a file and call `start.sh` on it.
 
-#### Running it in prod
-
-Docker recommends keeping the two configs separate so that the dev environment can evolve without affecting configs meant for prod. `prod.env` provides a place to keep defaults which would be sane for prod. Note that it's called within the `prod.yml` file with `env_file`. This isn't a required practice, but in a CI/CD world, it's good to be specific about what's for dev and what's for prod. Deploying into prod then looks something like this:
-
-    $ docker-compose up -d -f prod.yml
-
-An alternative to using `env_file`, which will inject those env vars into the container, and `prod.env` would be to re-write prod.env as a shell script. Instead of just setting the vars, `export` would be used, then the command to launch into prod would be:
-
-    $ source prod.env.sh && docker-compose up -d -f prod.yml
-
+    $ echo HOST_HTTPS="443" >> prod.env
+    $ echo HOST_SSH="22" >> prod.env
+    $ echo GITLAB_SUBDOMAIN="gitlab" >> prod.env
+    $ ./start.sh prod.env
 
 ### Configuring GitLab
 
@@ -74,3 +68,8 @@ An alternative to using `env_file`, which will inject those env vars into the co
     1601
 
 ...TODO...
+
+
+## Known Issues
+
+* SELinux will cause problems with the runner as configured by default. [See the docs for more info](https://docs.gitlab.com/runner/install/docker.html#selinux)
