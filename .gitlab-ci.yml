@@ -1,0 +1,6 @@
+variables:
+  # pre-def vars here: https://docs.gitlab.com/ee/ci/variables/README.html
+  ENV_FILE: ""
+docker_compose_update:
+  script:
+    - ./start.sh $ENV_FILE
