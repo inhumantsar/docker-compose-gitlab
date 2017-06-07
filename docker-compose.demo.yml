@@ -2,6 +2,7 @@ web:
   image: 'gitlab/gitlab-ce:${GITLAB_IMAGE_TAG}'
   restart: always
   hostname: '${GITLAB_HOSTNAME}'
+  env_file: 'demo.env'
   # environment:
     # GITLAB_OMNIBUS_CONFIG: |
         # any config added here will override whatever's in the gitlab.rb file, if one exists.
@@ -19,6 +20,7 @@ runner:
   restart: always
   links:
     - web
+  env_file: 'demo.env'
   environment:
     REGISTER_NON_INTERACTIVE: "true"
     RUNNER_NAME: gitlab-runner-master
