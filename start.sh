@@ -28,6 +28,9 @@ fi
 ### start up docker-compose services in the background
 docker-compose up -d
 
+echo "Sleeping for 5s to give GitLab's workers time to start..."
+sleep 5
+
 ### register the ci runner with gitlab
 # d-c names containers after the parent folder of the d-c.yml file, we want to be specific
 # so we're going to guess this name to get the container id
