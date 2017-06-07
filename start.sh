@@ -2,19 +2,23 @@
 usage() {
   echo "Start docker-compose GitLab stack, perform CI runner registration, tail logs."
   echo ""
-  echo "Usage: ./start.sh [env file]"
-  echo "  env file -- path to a file containing .env var overrides"
+  echo "Usage: ./start.sh [env name]"
+  echo "  env name -- name of env (ie: <env_name>.env docker-compose.<env_name>.yaml)"
 }
 
 ### did the user pass an env file?
 if [ ! -z $1 ]; then
+  env_file="${1}.env"
   if [ "$1" == "--help" ] || [ "$1" == "-h" ] || [ "$1" == "help" ]; then
     usage
     exit 0
-  elif [ -f $1 ]; then
-    source $1
+  elif [ -f $env_file ]; then
+    echo "Reading in env vars from ${env_file}..."
+    set -a
+    source $env_file
+    set +a
   else
-    echo "ERROR: Could not find a env file called '$1'"
+    echo "ERROR: Could not find a env file called '${env_file}'"
     echo ""
     usage
     exit 1

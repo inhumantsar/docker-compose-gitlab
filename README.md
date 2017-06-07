@@ -28,7 +28,10 @@ The goal in using docker-compose to build this out is to get to a point where an
     $ cd /path/to/docker-compose-gitlab
     $ ./start.sh
 
-A bunch of output will scroll by. Once tailed logs like the ones below start showing up, you should be able to access GitLab at http://localhost:8000. You can Ctrl+C at any time to stop the tailed logs. If you don't see the CI runner at http://localhost:8000/admin/runners then copy the registration token shown and update `docker-compose.yml` so that the runner's `REGISTRATION_TOKEN` matches it.
+A bunch of output will scroll by. Once tailed logs like the ones below start showing up, you should be able to access GitLab at http://localhost:8000. You can Ctrl+C at any time to stop the tailed logs.
+
+#### Initial CI Runner Setup
+When starting a new GitLab instance with no previous data, you will need to set up the Runner with a new registration token. If you don't see the CI runner at http://localhost:8000/admin/runners then copy the registration token shown and update the appropriate .env file.
 
 #### Persistence
 
